@@ -1,0 +1,42 @@
+name: Run Cypress Tests
+
+on:
+  push:
+    branches:
+      - '**'  # Runs on push to any branch
+  pull_request:
+    branches:
+      - '**'  # Runs on PR targeting any branch
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Step 2: Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20' # or your required Node.js version
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        npm install
+
+    # Step 4: Run Cypress tests
+    - name: Run Cypress tests
+      run: |
+        npm run test:e2e
+
+    # Optional: Display test videos/screenshots if enabled in Cypress config
+    - name: Upload Cypress videos
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: cypress-videos
+        path: cypress/videos 
